@@ -12,10 +12,36 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        $this->call('UserTableSeeder');
 
-        // $this->call(UserTableSeeder::class);
-
-        Model::reguard();
+        $this->command->info('User table seeded!');
     }
+}
+
+class UserTableSeeder extends Seeder {
+
+    public function run()
+    {
+        //Schema::drop('users');
+
+        Schema::create('users', function($table)
+        {
+            $table->increments('id');
+        });
+
+        Schema::table('users', function($table)
+        {
+            $table->string('email');
+            $table->string('name');
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+        DB::table('users')->insert([
+            ['name' => 'Jeremy', 'email' => 'jsarda@mcclainconcepts.com','password' => bcrypt('LaravelTestPW')],
+            ['name' => 'Eddie', 'email' => 'eddie@chrysaliswebdevelopment.com','password' => bcrypt('LaravelTestPW')]
+            ]);
+    }
+
 }
